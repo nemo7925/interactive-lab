@@ -2,684 +2,723 @@
 <html lang="ko">
 
 <head>
-  <meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
+<meta charset="UTF-8">
 
-  <title>Nemo's World</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
 
-  <style>
+<title>Nemo's World</title>
 
-    /* ================================
-       기본
-    ================================= */
+<style>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+/* =========================
+   기본
+========================= */
 
-    html,
-    body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    body {
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Apple SD Gothic Neo",
-        sans-serif;
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
-      background: #050814;
-      color: white;
-    }
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Apple SD Gothic Neo",
+    sans-serif;
 
+  background: #050814;
+  color: white;
+}
 
-    /* ================================
-       메인
-    ================================= */
 
-    #main {
-      position: relative;
+/* =========================
+   메인 화면
+========================= */
 
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
+#main {
+  position: relative;
 
-      overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
 
-      background: #050814;
-    }
+  overflow: hidden;
 
+  background: #050814;
+}
 
-    /* ================================
-       배경 이미지
-    ================================= */
 
-    #scene {
-      position: absolute;
+/* =========================
+   배경
+========================= */
 
-      inset: 0;
+#scene {
+  position: absolute;
 
-      width: 100%;
-      height: 100%;
+  inset: 0;
 
-      overflow: hidden;
+  width: 100%;
+  height: 100%;
 
-      z-index: 0;
-    }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  overflow: hidden;
 
-    #scene img {
-      position: absolute;
+  z-index: 0;
+}
 
-      inset: 0;
 
-      width: 100%;
-      height: 100%;
+/* =========================
+   이미지
+========================= */
 
-      /*
-        화면을 빈틈없이 채움
-        화면 비율이 다르면
-        이미지 일부가 잘릴 수 있음
-      */
+#scene img {
 
-      object-fit: cover;
+  position: absolute;
 
-      object-position: center center;
+  width: 100%;
+  height: 100%;
 
-      display: block;
+  object-fit: contain;
 
-      user-select: none;
-      -webkit-user-select: none;
+  object-position: center center;
 
-      pointer-events: none;
+  display: block;
 
-      transition:
-        opacity 1.5s ease;
-    }
+  user-select: none;
+  -webkit-user-select: none;
 
+  pointer-events: none;
 
-    /* 낮 */
+  transition:
+    opacity 1.5s ease;
+}
 
-    #day {
-      opacity: 1;
-    }
 
+/* 낮 */
 
-    /* 밤 */
+#day {
+  opacity: 1;
+}
 
-    #night {
-      opacity: 0;
-    }
 
+/* 밤 */
 
-    /* ================================
-       상단 제목
-    ================================= */
+#night {
+  opacity: 0;
+}
 
-    #title {
-      position: absolute;
 
-      top:
-        max(
-          28px,
-          env(safe-area-inset-top)
-        );
+/* =========================
+   제목
+========================= */
 
-      left: 50%;
+#title {
 
-      transform:
-        translateX(-50%);
+  position: absolute;
 
-      width: 90%;
+  top:
+    max(
+      28px,
+      env(safe-area-inset-top)
+    );
 
-      text-align: center;
+  left: 50%;
 
-      z-index: 20;
+  transform:
+    translateX(-50%);
 
-      pointer-events: none;
+  width: 90%;
 
-      text-shadow:
-        0 2px 20px
-        rgba(0, 0, 0, 0.45);
-    }
+  text-align: center;
 
+  z-index: 20;
 
-    #title h1 {
-      font-size: 22px;
+  pointer-events: none;
 
-      font-weight: 400;
+  text-shadow:
+    0 2px 20px
+    rgba(0,0,0,0.45);
+}
 
-      letter-spacing: 0.15em;
-    }
 
+#title h1 {
 
-    #title p {
-      margin-top: 8px;
+  font-size: 22px;
 
-      font-size: 11px;
+  font-weight: 400;
 
-      letter-spacing: 0.08em;
+  letter-spacing: 0.15em;
+}
 
-      opacity: 0.7;
-    }
 
+#title p {
 
-    /* ================================
-       왼쪽 메뉴
-    ================================= */
+  margin-top: 8px;
 
-    #menu {
-      position: absolute;
+  font-size: 11px;
 
-      left: 24px;
+  letter-spacing: 0.08em;
 
-      bottom:
-        calc(
-          28px +
-          env(safe-area-inset-bottom)
-        );
+  opacity: 0.7;
+}
 
-      display: flex;
 
-      flex-direction: column;
+/* =========================
+   메뉴
+========================= */
 
-      gap: 10px;
+#menu {
 
-      z-index: 30;
-    }
+  position: absolute;
 
+  left: 24px;
 
-    .menu-item {
-      border: none;
+  bottom:
+    calc(
+      28px +
+      env(safe-area-inset-bottom)
+    );
 
-      padding: 0;
+  display: flex;
 
-      background: transparent;
+  flex-direction: column;
 
-      color: white;
+  gap: 10px;
 
-      font-family: inherit;
+  z-index: 30;
+}
 
-      font-size: 12px;
 
-      letter-spacing: 0.16em;
+.menu-item {
 
-      text-align: left;
+  border: none;
 
-      opacity: 0.75;
+  padding: 0;
 
-      cursor: pointer;
+  background: transparent;
 
-      transition:
-        opacity 0.25s ease,
-        transform 0.25s ease;
-    }
+  color: white;
 
+  font-family: inherit;
 
-    .menu-item:hover {
-      opacity: 1;
+  font-size: 12px;
 
-      transform:
-        translateX(5px);
-    }
+  letter-spacing: 0.16em;
 
+  text-align: left;
 
-    .menu-item:active {
-      transform:
-        translateX(3px)
-        scale(0.97);
-    }
+  opacity: 0.75;
 
+  cursor: pointer;
 
-    /* ================================
-       별자리 버튼
-    ================================= */
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
 
-    #constellation {
-      position: absolute;
 
-      /*
-        배경 그림에 맞춰
-        나중에 위치를 조정하면 됨
-      */
+.menu-item:hover {
 
-      top: 20%;
-      left: 70%;
+  opacity: 1;
 
-      width: 34px;
-      height: 34px;
+  transform:
+    translateX(5px);
+}
 
-      padding: 0;
 
-      border: none;
+.menu-item:active {
 
-      border-radius: 50%;
+  transform:
+    translateX(3px)
+    scale(0.97);
+}
 
-      background: white;
 
-      box-shadow:
-        0 0 8px white,
-        0 0 20px
-        rgba(150, 200, 255, 0.95),
-        0 0 40px
-        rgba(100, 160, 255, 0.7);
+/* =========================
+   별자리
+========================= */
 
-      cursor: pointer;
+#constellation {
 
-      z-index: 25;
+  position: absolute;
 
-      animation:
-        starPulse 3s
-        ease-in-out
-        infinite;
-    }
+  top: 20%;
+  left: 70%;
 
+  width: 34px;
+  height: 34px;
 
-    @keyframes starPulse {
+  padding: 0;
 
-      0%,
-      100% {
-        transform: scale(0.8);
-        opacity: 0.65;
-      }
+  border: none;
 
-      50% {
-        transform: scale(1);
-        opacity: 1;
-      }
+  border-radius: 50%;
 
-    }
+  background: white;
 
+  box-shadow:
+    0 0 8px white,
+    0 0 20px
+      rgba(150,200,255,0.95),
+    0 0 40px
+      rgba(100,160,255,0.7);
 
-    /* ================================
-       TEA 버튼
-    ================================= */
+  cursor: pointer;
 
-    #tea-button {
-      position: absolute;
+  z-index: 25;
 
-      right: 24px;
+  animation:
+    starPulse 3s
+    ease-in-out
+    infinite;
+}
 
-      bottom:
-        calc(
-          28px +
-          env(safe-area-inset-bottom)
-        );
 
-      width: 58px;
-      height: 58px;
+@keyframes starPulse {
 
-      border-radius: 50%;
+  0%,
+  100% {
 
-      border:
-        1px solid
-        rgba(255, 255, 255, 0.3);
+    transform:
+      scale(0.8);
 
-      background:
-        rgba(255, 255, 255, 0.12);
+    opacity: 0.65;
+  }
 
-      color: white;
+  50% {
 
-      font-family: inherit;
+    transform:
+      scale(1);
 
-      backdrop-filter:
-        blur(12px);
+    opacity: 1;
+  }
 
-      -webkit-backdrop-filter:
-        blur(12px);
+}
 
-      cursor: pointer;
 
-      z-index: 40;
+/* =========================
+   TEA 버튼
+========================= */
 
-      transition:
-        transform 0.25s ease,
-        background 0.25s ease;
-    }
+#tea-button {
 
+  position: absolute;
 
-    #tea-button:hover {
-      transform: scale(1.08);
+  right: 24px;
 
-      background:
-        rgba(255, 255, 255, 0.2);
-    }
+  bottom:
+    calc(
+      28px +
+      env(safe-area-inset-bottom)
+    );
 
+  width: 58px;
+  height: 58px;
 
-    #tea-button:active {
-      transform: scale(0.95);
-    }
+  border-radius: 50%;
 
+  border:
+    1px solid
+    rgba(255,255,255,0.3);
 
-    #tea-button .cup {
-      display: block;
+  background:
+    rgba(255,255,255,0.12);
 
-      font-size: 20px;
+  color: white;
 
-      line-height: 20px;
-    }
+  font-family: inherit;
 
+  backdrop-filter:
+    blur(12px);
 
-    #tea-button .label {
-      display: block;
+  -webkit-backdrop-filter:
+    blur(12px);
 
-      margin-top: 3px;
+  cursor: pointer;
 
-      font-size: 7px;
+  z-index: 40;
 
-      letter-spacing: 0.12em;
-    }
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
 
 
-    /* ================================
-       TEA 메뉴
-    ================================= */
+#tea-button:hover {
 
-    #tea-menu {
-      position: absolute;
+  transform:
+    scale(1.08);
 
-      right: 24px;
+  background:
+    rgba(255,255,255,0.2);
+}
 
-      bottom:
-        calc(
-          98px +
-          env(safe-area-inset-bottom)
-        );
 
-      width: 190px;
+#tea-button:active {
 
-      padding: 18px;
+  transform:
+    scale(0.95);
+}
 
-      border:
-        1px solid
-        rgba(255, 255, 255, 0.2);
 
-      border-radius: 20px;
+#tea-button .cup {
 
-      background:
-        rgba(8, 12, 25, 0.78);
+  display: block;
 
-      backdrop-filter:
-        blur(20px);
+  font-size: 20px;
 
-      -webkit-backdrop-filter:
-        blur(20px);
+  line-height: 20px;
+}
 
-      z-index: 50;
 
-      opacity: 0;
+#tea-button .label {
 
-      visibility: hidden;
+  display: block;
 
-      pointer-events: none;
+  margin-top: 3px;
 
-      transform:
-        translateY(12px);
+  font-size: 7px;
 
-      transition:
-        opacity 0.25s ease,
-        transform 0.25s ease,
-        visibility 0.25s ease;
-    }
+  letter-spacing: 0.12em;
+}
 
 
-    #tea-menu.open {
-      opacity: 1;
+/* =========================
+   TEA 메뉴
+========================= */
 
-      visibility: visible;
+#tea-menu {
 
-      pointer-events: auto;
+  position: absolute;
 
-      transform:
-        translateY(0);
-    }
+  right: 24px;
 
+  bottom:
+    calc(
+      98px +
+      env(safe-area-inset-bottom)
+    );
 
-    #tea-menu h2 {
-      margin-bottom: 12px;
+  width: 190px;
 
-      font-size: 13px;
+  padding: 18px;
 
-      font-weight: 400;
+  border:
+    1px solid
+    rgba(255,255,255,0.2);
 
-      letter-spacing: 0.16em;
-    }
+  border-radius: 20px;
 
+  background:
+    rgba(8,12,25,0.78);
 
-    .tea-item {
-      display: block;
+  backdrop-filter:
+    blur(20px);
 
-      width: 100%;
+  -webkit-backdrop-filter:
+    blur(20px);
 
-      padding: 9px 0;
+  z-index: 50;
 
-      border: none;
+  opacity: 0;
 
-      background: transparent;
+  visibility: hidden;
 
-      color: white;
+  pointer-events: none;
 
-      font-family: inherit;
+  transform:
+    translateY(12px);
 
-      font-size: 12px;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    visibility 0.25s ease;
+}
 
-      text-align: left;
 
-      opacity: 0.7;
+#tea-menu.open {
 
-      cursor: pointer;
-    }
+  opacity: 1;
 
+  visibility: visible;
 
-    .tea-item:hover {
-      opacity: 1;
-    }
+  pointer-events: auto;
 
+  transform:
+    translateY(0);
+}
 
-    /* ================================
-       메시지
-    ================================= */
 
-    #message {
-      position: absolute;
+#tea-menu h2 {
 
-      left: 50%;
-      top: 50%;
+  margin-bottom: 12px;
 
-      transform:
-        translate(-50%, -50%);
+  font-size: 13px;
 
-      padding:
-        13px 21px;
+  font-weight: 400;
 
-      border-radius: 30px;
+  letter-spacing: 0.16em;
+}
 
-      background:
-        rgba(255, 255, 255, 0.14);
 
-      backdrop-filter:
-        blur(15px);
+.tea-item {
 
-      -webkit-backdrop-filter:
-        blur(15px);
+  display: block;
 
-      color: white;
+  width: 100%;
 
-      font-size: 13px;
+  padding: 9px 0;
 
-      white-space: nowrap;
+  border: none;
 
-      opacity: 0;
+  background: transparent;
 
-      pointer-events: none;
+  color: white;
 
-      z-index: 100;
+  font-family: inherit;
 
-      transition:
-        opacity 0.5s ease;
-    }
+  font-size: 12px;
 
+  text-align: left;
 
-    #message.show {
-      opacity: 1;
-    }
+  opacity: 0.7;
 
+  cursor: pointer;
+}
 
-    /* ================================
-       SECRET
-    ================================= */
 
-    #secret {
-      position: absolute;
+.tea-item:hover {
 
-      left: 50%;
+  opacity: 1;
+}
 
-      bottom:
-        calc(
-          20px +
-          env(safe-area-inset-bottom)
-        );
 
-      transform:
-        translateX(-50%);
+/* =========================
+   메시지
+========================= */
 
-      border: none;
+#message {
 
-      background: transparent;
+  position: absolute;
 
-      color: white;
+  left: 50%;
+  top: 50%;
 
-      font-family: inherit;
+  transform:
+    translate(-50%, -50%);
 
-      font-size: 9px;
+  padding:
+    13px 21px;
 
-      letter-spacing: 0.2em;
+  border-radius: 30px;
 
-      opacity: 0.3;
+  background:
+    rgba(255,255,255,0.14);
 
-      cursor: pointer;
+  backdrop-filter:
+    blur(15px);
 
-      z-index: 35;
-    }
+  -webkit-backdrop-filter:
+    blur(15px);
 
+  color: white;
 
-    #secret:hover {
-      opacity: 0.9;
-    }
+  font-size: 13px;
 
+  white-space: nowrap;
 
-    /* ================================
-       모바일
-    ================================= */
+  opacity: 0;
 
-    @media (max-width: 600px) {
+  pointer-events: none;
 
-      #title {
-        top:
-          max(
-            22px,
-            env(safe-area-inset-top)
-          );
-      }
+  z-index: 100;
 
+  transition:
+    opacity 0.5s ease;
+}
 
-      #title h1 {
-        font-size: 18px;
-      }
 
+#message.show {
 
-      #title p {
-        font-size: 10px;
-      }
+  opacity: 1;
+}
 
 
-      #menu {
-        left: 18px;
+/* =========================
+   SECRET
+========================= */
 
-        bottom:
-          calc(
-            22px +
-            env(safe-area-inset-bottom)
-          );
-      }
+#secret {
 
+  position: absolute;
 
-      #tea-button {
-        right: 18px;
+  left: 50%;
 
-        bottom:
-          calc(
-            22px +
-            env(safe-area-inset-bottom)
-          );
-      }
+  bottom:
+    calc(
+      20px +
+      env(safe-area-inset-bottom)
+    );
 
+  transform:
+    translateX(-50%);
 
-      #tea-menu {
-        right: 18px;
+  border: none;
 
-        bottom:
-          calc(
-            92px +
-            env(safe-area-inset-bottom)
-          );
-      }
+  background: transparent;
 
+  color: white;
 
-      #constellation {
-        width: 30px;
-        height: 30px;
+  font-family: inherit;
 
-        top: 18%;
-        left: 68%;
-      }
+  font-size: 9px;
 
+  letter-spacing: 0.2em;
 
-      #secret {
-        display: none;
-      }
+  opacity: 0.3;
 
-    }
+  cursor: pointer;
 
+  z-index: 35;
+}
 
-    /* ================================
-       아주 작은 화면
-    ================================= */
 
-    @media (max-height: 600px) {
+#secret:hover {
 
-      #title h1 {
-        font-size: 17px;
-      }
+  opacity: 0.9;
+}
 
 
-      #title p {
-        display: none;
-      }
+/* =========================
+   모바일
+========================= */
 
+@media (max-width: 600px) {
 
-      #menu {
-        gap: 7px;
-      }
+  #title {
 
+    top:
+      max(
+        22px,
+        env(safe-area-inset-top)
+      );
+  }
 
-      #tea-button {
-        width: 50px;
-        height: 50px;
-      }
 
-    }
+  #title h1 {
 
-  </style>
+    font-size: 18px;
+  }
+
+
+  #title p {
+
+    font-size: 10px;
+  }
+
+
+  #menu {
+
+    left: 18px;
+
+    bottom:
+      calc(
+        22px +
+        env(safe-area-inset-bottom)
+      );
+  }
+
+
+  #tea-button {
+
+    right: 18px;
+
+    bottom:
+      calc(
+        22px +
+        env(safe-area-inset-bottom)
+      );
+  }
+
+
+  #tea-menu {
+
+    right: 18px;
+
+    bottom:
+      calc(
+        92px +
+        env(safe-area-inset-bottom)
+      );
+  }
+
+
+  #constellation {
+
+    width: 30px;
+    height: 30px;
+
+    top: 18%;
+    left: 68%;
+  }
+
+
+  #secret {
+
+    display: none;
+  }
+
+}
+
+
+/* =========================
+   가로가 짧은 화면
+========================= */
+
+@media (max-height: 600px) {
+
+  #title h1 {
+
+    font-size: 17px;
+  }
+
+
+  #title p {
+
+    display: none;
+  }
+
+
+  #menu {
+
+    gap: 7px;
+  }
+
+
+  #tea-button {
+
+    width: 50px;
+    height: 50px;
+  }
+
+}
+
+</style>
 
 </head>
 
@@ -687,446 +726,446 @@
 <body>
 
 
-  <main id="main">
+<main id="main">
 
 
-    <!-- ================================
-         배경
-    ================================= -->
+  <!-- =====================
+       배경 이미지
+  ====================== -->
 
-    <div id="scene">
+  <div id="scene">
 
-      <img
-        id="day"
-        src="https://raw.githubusercontent.com/nemo7925/data-center/refs/heads/main/images/day-test1.PNG"
-        alt=""
-      >
-
-      <img
-        id="night"
-        src="https://raw.githubusercontent.com/nemo7925/data-center/refs/heads/main/images/night-test.png"
-        alt=""
-      >
-
-    </div>
-
-
-    <!-- ================================
-         제목
-    ================================= -->
-
-    <header id="title">
-
-      <h1>NEMO'S WORLD</h1>
-
-      <p>
-        a little world of images &amp; stories
-      </p>
-
-    </header>
-
-
-    <!-- ================================
-         별자리
-    ================================= -->
-
-    <button
-      id="constellation"
-      type="button"
-      aria-label="나의 별자리"
-    ></button>
-
-
-    <!-- ================================
-         메뉴
-    ================================= -->
-
-    <nav id="menu">
-
-      <button
-        class="menu-item"
-        data-message="REST"
-        type="button"
-      >
-        REST
-      </button>
-
-
-      <button
-        class="menu-item"
-        data-message="DREAM"
-        type="button"
-      >
-        DREAM
-      </button>
-
-
-      <button
-        class="menu-item"
-        data-message="STORY"
-        type="button"
-      >
-        STORY
-      </button>
-
-
-      <button
-        class="menu-item"
-        data-message="PLAY"
-        type="button"
-      >
-        PLAY
-      </button>
-
-    </nav>
-
-
-    <!-- ================================
-         TEA
-    ================================= -->
-
-    <button
-      id="tea-button"
-      type="button"
-      aria-label="Tea Menu"
+    <img
+      id="day"
+      src="https://raw.githubusercontent.com/nemo7925/data-center/refs/heads/main/images/day-test1.PNG"
+      alt=""
     >
 
-      <span class="cup">🍵</span>
-
-      <span class="label">TEA</span>
-
-    </button>
-
-
-    <!-- ================================
-         TEA 메뉴
-    ================================= -->
-
-    <section id="tea-menu">
-
-      <h2>TEA MENU</h2>
-
-
-      <button
-        class="tea-item"
-        data-tea="GREEN TEA"
-        type="button"
-      >
-        Green Tea
-      </button>
-
-
-      <button
-        class="tea-item"
-        data-tea="ROSE TEA"
-        type="button"
-      >
-        Rose Tea
-      </button>
-
-
-      <button
-        class="tea-item"
-        data-tea="BLACK TEA"
-        type="button"
-      >
-        Black Tea
-      </button>
-
-
-      <button
-        class="tea-item"
-        data-tea="NIGHT TEA"
-        type="button"
-      >
-        Night Tea
-      </button>
-
-    </section>
-
-
-    <!-- ================================
-         SECRET
-    ================================= -->
-
-    <button
-      id="secret"
-      type="button"
+    <img
+      id="night"
+      src="https://raw.githubusercontent.com/nemo7925/data-center/refs/heads/main/images/night-test.png"
+      alt=""
     >
-      SECRET
-    </button>
+
+  </div>
 
 
-    <!-- ================================
-         메시지
-    ================================= -->
+  <!-- =====================
+       제목
+  ====================== -->
 
-    <div id="message"></div>
+  <header id="title">
 
+    <h1>NEMO'S WORLD</h1>
 
-  </main>
+    <p>
+      a little world of images &amp; stories
+    </p>
 
-
-  <script>
-
-    /* =================================
-       요소
-    ================================= */
-
-    const dayImage =
-      document.getElementById("day");
-
-    const nightImage =
-      document.getElementById("night");
-
-    const constellation =
-      document.getElementById("constellation");
-
-    const teaButton =
-      document.getElementById("tea-button");
-
-    const teaMenu =
-      document.getElementById("tea-menu");
-
-    const message =
-      document.getElementById("message");
-
-    const main =
-      document.getElementById("main");
+  </header>
 
 
-    /* =================================
-       낮 / 밤
-    ================================= */
+  <!-- =====================
+       별자리
+  ====================== -->
 
-    function updateDayNight() {
-
-      const now =
-        new Date();
-
-      const hour =
-        now.getHours();
+  <button
+    id="constellation"
+    type="button"
+    aria-label="나의 별자리"
+  ></button>
 
 
-      /*
-        06:00 ~ 17:59
-        → 낮
-
-        18:00 ~ 05:59
-        → 밤
-      */
-
-      const isDay =
-        hour >= 6 &&
-        hour < 18;
-
-
-      if (isDay) {
-
-        dayImage.style.opacity = "1";
-
-        nightImage.style.opacity = "0";
-
-      }
-
-      else {
-
-        dayImage.style.opacity = "0";
-
-        nightImage.style.opacity = "1";
-
-      }
-
-    }
-
-
-    /*
-      처음 실행
-    */
-
-    updateDayNight();
-
-
-    /*
-      1분마다 시간 확인
-    */
-
-    setInterval(
-      updateDayNight,
-      60000
-    );
-
-
-    /* =================================
-       별자리 이동
-    ================================= */
-
-    constellation.addEventListener(
-      "click",
-      function() {
-
-        window.location.href =
-          "constellation/";
-
-      }
-    );
-
-
-    /* =================================
-       TEA 열기 / 닫기
-    ================================= */
-
-    teaButton.addEventListener(
-      "click",
-      function(event) {
-
-        event.stopPropagation();
-
-        teaMenu.classList.toggle(
-          "open"
-        );
-
-      }
-    );
-
-
-    /* =================================
-       TEA 선택
-    ================================= */
-
-    document
-      .querySelectorAll(".tea-item")
-      .forEach(
-        function(item) {
-
-          item.addEventListener(
-            "click",
-            function(event) {
-
-              event.stopPropagation();
-
-              const tea =
-                item.dataset.tea;
-
-              showMessage(
-                tea +
-                "를 선택했어요."
-              );
-
-              teaMenu.classList.remove(
-                "open"
-              );
-
-            }
-          );
-
-        }
-      );
-
-
-    /* =================================
+  <!-- =====================
        메뉴
-    ================================= */
+  ====================== -->
 
-    document
-      .querySelectorAll(".menu-item")
-      .forEach(
-        function(item) {
+  <nav id="menu">
 
-          item.addEventListener(
-            "click",
-            function() {
-
-              showMessage(
-                item.dataset.message
-              );
-
-            }
-          );
-
-        }
-      );
+    <button
+      class="menu-item"
+      data-message="REST"
+      type="button"
+    >
+      REST
+    </button>
 
 
-    /* =================================
+    <button
+      class="menu-item"
+      data-message="DREAM"
+      type="button"
+    >
+      DREAM
+    </button>
+
+
+    <button
+      class="menu-item"
+      data-message="STORY"
+      type="button"
+    >
+      STORY
+    </button>
+
+
+    <button
+      class="menu-item"
+      data-message="PLAY"
+      type="button"
+    >
+      PLAY
+    </button>
+
+  </nav>
+
+
+  <!-- =====================
+       TEA
+  ====================== -->
+
+  <button
+    id="tea-button"
+    type="button"
+    aria-label="Tea Menu"
+  >
+
+    <span class="cup">🍵</span>
+
+    <span class="label">
+      TEA
+    </span>
+
+  </button>
+
+
+  <!-- =====================
+       TEA MENU
+  ====================== -->
+
+  <section id="tea-menu">
+
+    <h2>
+      TEA MENU
+    </h2>
+
+
+    <button
+      class="tea-item"
+      data-tea="GREEN TEA"
+      type="button"
+    >
+      Green Tea
+    </button>
+
+
+    <button
+      class="tea-item"
+      data-tea="ROSE TEA"
+      type="button"
+    >
+      Rose Tea
+    </button>
+
+
+    <button
+      class="tea-item"
+      data-tea="BLACK TEA"
+      type="button"
+    >
+      Black Tea
+    </button>
+
+
+    <button
+      class="tea-item"
+      data-tea="NIGHT TEA"
+      type="button"
+    >
+      Night Tea
+    </button>
+
+  </section>
+
+
+  <!-- =====================
        SECRET
-    ================================= */
+  ====================== -->
 
-    secret.addEventListener(
-      "click",
-      function() {
+  <button
+    id="secret"
+    type="button"
+  >
+    SECRET
+  </button>
 
-        showMessage(
-          "아직 아무도 발견하지 못한 곳이에요."
-        );
 
-      }
+  <!-- =====================
+       메시지
+  ====================== -->
+
+  <div id="message"></div>
+
+
+</main>
+
+
+<script>
+
+/* =========================
+   요소
+========================= */
+
+const dayImage =
+  document.getElementById("day");
+
+const nightImage =
+  document.getElementById("night");
+
+const constellation =
+  document.getElementById("constellation");
+
+const teaButton =
+  document.getElementById("tea-button");
+
+const teaMenu =
+  document.getElementById("tea-menu");
+
+const message =
+  document.getElementById("message");
+
+const main =
+  document.getElementById("main");
+
+const secret =
+  document.getElementById("secret");
+
+
+/* =========================
+   낮 / 밤
+========================= */
+
+function updateDayNight() {
+
+  const now =
+    new Date();
+
+  const hour =
+    now.getHours();
+
+
+  /*
+    06:00 ~ 17:59
+    낮
+
+    18:00 ~ 05:59
+    밤
+  */
+
+  const isDay =
+    hour >= 6 &&
+    hour < 18;
+
+
+  if (isDay) {
+
+    dayImage.style.opacity = "1";
+
+    nightImage.style.opacity = "0";
+
+  } else {
+
+    dayImage.style.opacity = "0";
+
+    nightImage.style.opacity = "1";
+
+  }
+
+}
+
+
+/* 처음 실행 */
+
+updateDayNight();
+
+
+/* 1분마다 확인 */
+
+setInterval(
+  updateDayNight,
+  60000
+);
+
+
+/* =========================
+   별자리 이동
+========================= */
+
+constellation.addEventListener(
+  "click",
+  function() {
+
+    window.location.href =
+      "constellation/";
+
+  }
+);
+
+
+/* =========================
+   TEA 열기
+========================= */
+
+teaButton.addEventListener(
+  "click",
+  function(event) {
+
+    event.stopPropagation();
+
+    teaMenu.classList.toggle(
+      "open"
     );
 
+  }
+);
 
-    /* =================================
-       화면 클릭
-       → TEA 닫기
-    ================================= */
 
-    main.addEventListener(
-      "click",
-      function(event) {
+/* =========================
+   TEA 선택
+========================= */
 
-        if (
-          event.target !== teaButton &&
-          !teaMenu.contains(
-            event.target
-          )
-        ) {
+document
+  .querySelectorAll(".tea-item")
+  .forEach(
+    function(item) {
+
+      item.addEventListener(
+        "click",
+        function(event) {
+
+          event.stopPropagation();
+
+          const tea =
+            item.dataset.tea;
+
+          showMessage(
+            tea +
+            "를 선택했어요."
+          );
 
           teaMenu.classList.remove(
             "open"
           );
 
         }
+      );
 
-      }
+    }
+  );
+
+
+/* =========================
+   메뉴
+========================= */
+
+document
+  .querySelectorAll(".menu-item")
+  .forEach(
+    function(item) {
+
+      item.addEventListener(
+        "click",
+        function() {
+
+          showMessage(
+            item.dataset.message
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+/* =========================
+   SECRET
+========================= */
+
+secret.addEventListener(
+  "click",
+  function() {
+
+    showMessage(
+      "아직 아무도 발견하지 못한 곳이에요."
     );
 
-
-    /* =================================
-       메시지
-    ================================= */
-
-    let messageTimer;
+  }
+);
 
 
-    function showMessage(text) {
+/* =========================
+   화면 클릭
+========================= */
 
-      message.textContent =
-        text;
+main.addEventListener(
+  "click",
+  function(event) {
 
-      message.classList.add(
-        "show"
+    if (
+      event.target !== teaButton &&
+      !teaMenu.contains(
+        event.target
+      )
+    ) {
+
+      teaMenu.classList.remove(
+        "open"
       );
-
-
-      clearTimeout(
-        messageTimer
-      );
-
-
-      messageTimer =
-        setTimeout(
-          function() {
-
-            message.classList.remove(
-              "show"
-            );
-
-          },
-          1800
-        );
 
     }
 
-  </script>
+  }
+);
+
+
+/* =========================
+   메시지
+========================= */
+
+let messageTimer;
+
+
+function showMessage(text) {
+
+  message.textContent =
+    text;
+
+  message.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    messageTimer
+  );
+
+
+  messageTimer =
+    setTimeout(
+      function() {
+
+        message.classList.remove(
+          "show"
+        );
+
+      },
+      1800
+    );
+
+}
+
+</script>
 
 
 </body>
