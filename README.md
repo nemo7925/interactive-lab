@@ -1,1 +1,66 @@
-# interactive-lab
+# Interactive Lab
+
+### Interactive Visual Artist & Storyteller
+
+그림과 이야기, 움직임, 음악, 인터랙션을 결합하는
+개인 창작 실험실.
+
+---
+
+## About
+
+Interactive Lab은 한 장의 그림 안에 머물며
+작은 움직임과 이야기를 발견하는 경험을 만든다.
+
+완성된 애니메이션을 바라보는 것이 아니라
+사용자가 직접 만지고, 움직이고, 발견하면서
+그림이 살아나는 것을 목표로 한다.
+
+---
+
+## Experiments
+
+### 나의 별자리
+
+밤하늘을 터치하면 별이 생긴다.
+
+별과 별은 차례로 연결되고,
+사용자가 만든 별자리는 하나의 작은 이야기가 된다.
+
+**Interaction**
+- Touch
+- Pointer interaction
+- SVG connection
+- Responsive layout
+
+---
+
+## Direction
+
+Interactive Lab의 메인 공간은
+일반적인 메뉴 화면이 아니라
+탐색할 수 있는 하나의 그림을 지향한다.
+
+사용자는 메뉴를 클릭하는 대신
+그림을 만지고, 머물고, 발견한다.
+
+---
+
+## Experiments to Come
+
+- Tea Menu
+- 문 열기
+- 연못
+- 비 오는 창문
+- 숨겨진 밤의 이야기
+- Secret Page
+
+---
+
+## Tech
+
+HTML
+CSS
+JavaScript
+SVG
+GitHub Pages
