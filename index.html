@@ -2,6 +2,7 @@
 <html lang="ko">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -11,14 +12,625 @@
 
   <title>Nemo's World</title>
 
-  <link rel="stylesheet" href="https://nemo7925.github.io/interactive-lab/style.css">
+
+  <style>
+
+    /* ========================================
+       기본
+    ======================================== */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      background: #050814;
+      color: white;
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Apple SD Gothic Neo",
+        sans-serif;
+    }
+
+
+    /* ========================================
+       메인 화면
+    ======================================== */
+
+    #main {
+
+      position: relative;
+
+      width: 100%;
+
+      height: 100vh;
+      height: 100dvh;
+
+      overflow: hidden;
+
+      touch-action: manipulation;
+    }
+
+
+    /* ========================================
+       낮 / 밤 이미지
+    ======================================== */
+
+    #scene {
+
+      position: absolute;
+
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+
+      overflow: hidden;
+
+      z-index: 0;
+    }
+
+
+    #scene img {
+
+      position: absolute;
+
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+
+      /*
+        이미지 전체가 보이도록 설정
+      */
+
+      object-fit: contain;
+
+      object-position: center;
+
+      user-select: none;
+
+      pointer-events: none;
+
+      transition:
+        opacity 1.8s ease;
+    }
+
+
+    /* 낮 */
+
+    #day {
+      opacity: 1;
+    }
+
+
+    /* 밤 */
+
+    #night {
+      opacity: 0;
+    }
+
+
+    /* ========================================
+       사이트 제목
+    ======================================== */
+
+    #title {
+
+      position: absolute;
+
+      top:
+        max(
+          28px,
+          env(safe-area-inset-top)
+        );
+
+      left: 50%;
+
+      transform:
+        translateX(-50%);
+
+      width: 90%;
+
+      text-align: center;
+
+      z-index: 20;
+
+      pointer-events: none;
+
+      text-shadow:
+        0 2px 20px
+        rgba(0, 0, 0, 0.4);
+    }
+
+
+    #title h1 {
+
+      font-size: 22px;
+
+      font-weight: 400;
+
+      letter-spacing: 0.15em;
+    }
+
+
+    #title p {
+
+      margin-top: 8px;
+
+      font-size: 11px;
+
+      opacity: 0.65;
+
+      letter-spacing: 0.08em;
+    }
+
+
+    /* ========================================
+       메뉴
+    ======================================== */
+
+    #categories {
+
+      position: absolute;
+
+      left: 24px;
+
+      bottom:
+        calc(
+          28px +
+          env(safe-area-inset-bottom)
+        );
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 10px;
+
+      z-index: 30;
+    }
+
+
+    .category {
+
+      border: none;
+
+      background: none;
+
+      color: white;
+
+      font-size: 12px;
+
+      letter-spacing: 0.15em;
+
+      opacity: 0.7;
+
+      cursor: pointer;
+
+      text-align: left;
+
+      transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+    }
+
+
+    .category:hover {
+
+      opacity: 1;
+
+      transform:
+        translateX(5px);
+    }
+
+
+    /* ========================================
+       별자리 버튼
+    ======================================== */
+
+    #constellation {
+
+      position: absolute;
+
+      /*
+        임시 위치
+        나중에 그림에 맞춰 조정
+      */
+
+      top: 20%;
+
+      left: 70%;
+
+      width: 38px;
+
+      height: 38px;
+
+      border: none;
+
+      border-radius: 50%;
+
+      background: white;
+
+      cursor: pointer;
+
+      z-index: 25;
+
+      box-shadow:
+
+        0 0 8px white,
+
+        0 0 20px
+        rgba(150, 200, 255, 0.9),
+
+        0 0 40px
+        rgba(100, 160, 255, 0.6);
+
+      animation:
+        starPulse 3s
+        ease-in-out
+        infinite;
+    }
+
+
+    @keyframes starPulse {
+
+      0%,
+      100% {
+
+        transform:
+          scale(0.8);
+
+        opacity: 0.65;
+      }
+
+      50% {
+
+        transform:
+          scale(1);
+
+        opacity: 1;
+      }
+    }
+
+
+    /* ========================================
+       TEA 버튼
+    ======================================== */
+
+    #teaButton {
+
+      position: absolute;
+
+      right: 28px;
+
+      bottom:
+        calc(
+          30px +
+          env(safe-area-inset-bottom)
+        );
+
+      width: 58px;
+
+      height: 58px;
+
+      border-radius: 50%;
+
+      border:
+        1px solid
+        rgba(255,255,255,0.35);
+
+      background:
+        rgba(255,255,255,0.12);
+
+      color: white;
+
+      backdrop-filter:
+        blur(10px);
+
+      -webkit-backdrop-filter:
+        blur(10px);
+
+      cursor: pointer;
+
+      z-index: 40;
+
+      transition:
+        transform 0.3s ease,
+        background 0.3s ease;
+    }
+
+
+    #teaButton:hover {
+
+      transform:
+        scale(1.08);
+
+      background:
+        rgba(255,255,255,0.2);
+    }
+
+
+    #teaButton span {
+
+      display: block;
+
+      font-size: 20px;
+    }
+
+
+    #teaButton small {
+
+      display: block;
+
+      margin-top: 2px;
+
+      font-size: 7px;
+
+      letter-spacing: 0.1em;
+    }
+
+
+    /* ========================================
+       TEA 메뉴
+    ======================================== */
+
+    #teaMenu {
+
+      position: absolute;
+
+      right: 25px;
+
+      bottom:
+        calc(
+          100px +
+          env(safe-area-inset-bottom)
+        );
+
+      width: 180px;
+
+      padding: 18px;
+
+      border:
+        1px solid
+        rgba(255,255,255,0.2);
+
+      border-radius: 20px;
+
+      background:
+        rgba(10,15,30,0.78);
+
+      backdrop-filter:
+        blur(20px);
+
+      -webkit-backdrop-filter:
+        blur(20px);
+
+      z-index: 50;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      transform:
+        translateY(15px);
+
+      transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+    }
+
+
+    #teaMenu.show {
+
+      opacity: 1;
+
+      pointer-events: auto;
+
+      transform:
+        translateY(0);
+    }
+
+
+    #teaMenu h2 {
+
+      font-size: 13px;
+
+      font-weight: 400;
+
+      letter-spacing: 0.15em;
+
+      margin-bottom: 14px;
+    }
+
+
+    .tea {
+
+      display: block;
+
+      width: 100%;
+
+      padding: 9px 0;
+
+      border: none;
+
+      background: none;
+
+      color: white;
+
+      text-align: left;
+
+      font-size: 12px;
+
+      opacity: 0.7;
+
+      cursor: pointer;
+    }
+
+
+    .tea:hover {
+
+      opacity: 1;
+    }
+
+
+    /* ========================================
+       SECRET
+    ======================================== */
+
+    #secret {
+
+      position: absolute;
+
+      left: 50%;
+
+      bottom:
+        calc(
+          20px +
+          env(safe-area-inset-bottom)
+        );
+
+      transform:
+        translateX(-50%);
+
+      border: none;
+
+      background: none;
+
+      color: white;
+
+      font-size: 10px;
+
+      letter-spacing: 0.2em;
+
+      opacity: 0.35;
+
+      cursor: pointer;
+
+      z-index: 35;
+    }
+
+
+    #secret:hover {
+      opacity: 1;
+    }
+
+
+    /* ========================================
+       메시지
+    ======================================== */
+
+    #message {
+
+      position: absolute;
+
+      top: 50%;
+
+      left: 50%;
+
+      transform:
+        translate(-50%, -50%);
+
+      padding:
+        14px 22px;
+
+      border-radius: 30px;
+
+      background:
+        rgba(255,255,255,0.12);
+
+      backdrop-filter:
+        blur(15px);
+
+      -webkit-backdrop-filter:
+        blur(15px);
+
+      font-size: 13px;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      z-index: 100;
+
+      transition:
+        opacity 0.5s ease;
+    }
+
+
+    #message.show {
+      opacity: 1;
+    }
+
+
+    /* ========================================
+       모바일
+    ======================================== */
+
+    @media (max-width: 600px) {
+
+      #title h1 {
+        font-size: 18px;
+      }
+
+      #title p {
+        font-size: 10px;
+      }
+
+      #categories {
+
+        left: 18px;
+
+        bottom:
+          calc(
+            25px +
+            env(safe-area-inset-bottom)
+          );
+      }
+
+      #teaButton {
+        right: 18px;
+      }
+
+      #constellation {
+
+        top: 18%;
+
+        left: 68%;
+
+        width: 34px;
+
+        height: 34px;
+      }
+
+    }
+
+  </style>
+
 </head>
+
 
 <body>
 
+
   <main id="main">
 
-    <!-- 낮 / 밤 배경 -->
+
+    <!-- ====================================
+         낮 / 밤 배경
+    ===================================== -->
+
     <div id="scene">
 
       <img
@@ -36,7 +648,10 @@
     </div>
 
 
-    <!-- 제목 -->
+    <!-- ====================================
+         제목
+    ===================================== -->
+
     <div id="title">
 
       <h1>NEMO'S WORLD</h1>
@@ -48,14 +663,20 @@
     </div>
 
 
-    <!-- 별자리 -->
+    <!-- ====================================
+         나의 별자리
+    ===================================== -->
+
     <button
       id="constellation"
       aria-label="나의 별자리"
     ></button>
 
 
-    <!-- 메뉴 -->
+    <!-- ====================================
+         메뉴
+    ===================================== -->
+
     <nav id="categories">
 
       <button
@@ -89,7 +710,10 @@
     </nav>
 
 
-    <!-- Tea -->
+    <!-- ====================================
+         TEA
+    ===================================== -->
+
     <button
       id="teaButton"
       aria-label="Tea Menu"
@@ -102,7 +726,10 @@
     </button>
 
 
-    <!-- Tea 메뉴 -->
+    <!-- ====================================
+         TEA MENU
+    ===================================== -->
+
     <div id="teaMenu">
 
       <h2>TEA MENU</h2>
@@ -138,19 +765,288 @@
     </div>
 
 
-    <!-- Secret -->
+    <!-- ====================================
+         SECRET
+    ===================================== -->
+
     <button id="secret">
       SECRET
     </button>
 
 
-    <!-- 메시지 -->
+    <!-- ====================================
+         메시지
+    ===================================== -->
+
     <div id="message"></div>
+
 
   </main>
 
 
-  <script src="https://nemo7925.github.io/interactive-lab/script.js"></script>
+  <script>
+
+    /* ========================================
+       요소
+    ======================================== */
+
+    const dayImage =
+      document.getElementById("day");
+
+    const nightImage =
+      document.getElementById("night");
+
+    const teaButton =
+      document.getElementById("teaButton");
+
+    const teaMenu =
+      document.getElementById("teaMenu");
+
+    const constellation =
+      document.getElementById("constellation");
+
+    const secret =
+      document.getElementById("secret");
+
+    const message =
+      document.getElementById("message");
+
+
+    /* ========================================
+       낮 / 밤 판단
+    ======================================== */
+
+    function updateSceneByTime() {
+
+      const now =
+        new Date();
+
+      /*
+        방문자의 기기 현지 시간
+
+        06:00 ~ 17:59 → 낮
+        18:00 ~ 05:59 → 밤
+      */
+
+      const hour =
+        now.getHours();
+
+
+      if (
+        hour >= 6 &&
+        hour < 18
+      ) {
+
+        dayImage.style.opacity =
+          "1";
+
+        nightImage.style.opacity =
+          "0";
+
+      }
+
+      else {
+
+        dayImage.style.opacity =
+          "0";
+
+        nightImage.style.opacity =
+          "1";
+
+      }
+
+    }
+
+
+    /*
+      페이지가 열릴 때 실행
+    */
+
+    updateSceneByTime();
+
+
+    /*
+      사이트를 켜놓은 상태에서도
+      시간이 바뀌면 자동 변경
+    */
+
+    setInterval(
+      updateSceneByTime,
+      60000
+    );
+
+
+    /* ========================================
+       TEA 메뉴
+    ======================================== */
+
+    teaButton.addEventListener(
+      "click",
+      function(event) {
+
+        event.stopPropagation();
+
+        teaMenu.classList.toggle(
+          "show"
+        );
+
+      }
+    );
+
+
+    /* ========================================
+       TEA 선택
+    ======================================== */
+
+    document
+      .querySelectorAll(".tea")
+      .forEach(
+        function(tea) {
+
+          tea.addEventListener(
+            "click",
+            function() {
+
+              const teaName =
+                tea.dataset.tea;
+
+              showMessage(
+                teaName +
+                " TEA를 선택했어요 ☕"
+              );
+
+              teaMenu.classList.remove(
+                "show"
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+    /* ========================================
+       나의 별자리 이동
+    ======================================== */
+
+    constellation.addEventListener(
+      "click",
+      function() {
+
+        window.location.href =
+          "constellation/";
+
+      }
+    );
+
+
+    /* ========================================
+       메뉴
+    ======================================== */
+
+    document
+      .querySelectorAll(".category")
+      .forEach(
+        function(category) {
+
+          category.addEventListener(
+            "click",
+            function() {
+
+              showMessage(
+                category.dataset.message
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+    /* ========================================
+       SECRET
+    ======================================== */
+
+    secret.addEventListener(
+      "click",
+      function() {
+
+        showMessage(
+          "아직 아무도 발견하지 못한 곳이에요."
+        );
+
+      }
+    );
+
+
+    /* ========================================
+       메시지
+    ======================================== */
+
+    let messageTimer;
+
+
+    function showMessage(text) {
+
+      message.textContent =
+        text;
+
+      message.classList.add(
+        "show"
+      );
+
+
+      clearTimeout(
+        messageTimer
+      );
+
+
+      messageTimer =
+        setTimeout(
+          function() {
+
+            message.classList.remove(
+              "show"
+            );
+
+          },
+          1800
+        );
+
+    }
+
+
+    /* ========================================
+       화면 바깥 클릭
+       → TEA 메뉴 닫기
+    ======================================== */
+
+    document
+      .getElementById("main")
+      .addEventListener(
+        "click",
+        function(event) {
+
+          if (
+            !teaMenu.contains(
+              event.target
+            ) &&
+            event.target !== teaButton
+          ) {
+
+            teaMenu.classList.remove(
+              "show"
+            );
+
+          }
+
+        }
+      );
+
+  </script>
+
 
 </body>
 
