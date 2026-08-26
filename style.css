@@ -1,0 +1,33 @@
+#scene {
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+
+  overflow: hidden;
+}
+
+#scene img {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  user-select: none;
+  pointer-events: none;
+
+  transition: opacity 1.5s ease;
+}
+
+#day {
+  opacity: 1;
+}
+
+#night {
+  opacity: 0;
+}
