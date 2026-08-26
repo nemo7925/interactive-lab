@@ -1,64 +1,661 @@
-# Interactive Lab
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
 
-### Interactive Visual Artist & Storyteller
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
 
-그림과 이야기, 움직임, 음악, 인터랙션을 결합하는
-개인 창작 실험실.
+  <title>나의 별자리</title>
 
----
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-## About
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
 
-Interactive Lab은 한 장의 그림 안에 머물며
-작은 움직임과 이야기를 발견하는 경험을 만든다.
+    body {
+      font-family: -apple-system, BlinkMacSystemFont,
+        "Apple SD Gothic Neo", sans-serif;
 
-완성된 애니메이션을 바라보는 것이 아니라
-사용자가 직접 만지고, 움직이고, 발견하면서
-그림이 살아나는 것을 목표로 한다.
+      background:
+        radial-gradient(
+          circle at 50% 120%,
+          #24385b 0%,
+          #10182d 35%,
+          #050814 70%,
+          #02030a 100%
+        );
 
----
+      color: white;
+    }
 
-## Experiments
+    #sky {
+      position: relative;
 
-### 나의 별자리
+      width: 100vw;
+      height: 100vh;
 
-밤하늘을 터치하면 별이 생긴다.
+      overflow: hidden;
 
-별과 별은 차례로 연결되고,
-사용자가 만든 별자리는 하나의 작은 이야기가 된다.
+      cursor: crosshair;
 
-**Interaction**
-- Touch
-- Pointer interaction
-- SVG connection
-- Responsive layout
+      touch-action: none;
+    }
 
----
+    /* 작은 배경 별 */
 
-## Direction
+    .background-star {
+      position: absolute;
 
-Interactive Lab의 메인 공간은
-일반적인 메뉴 화면이 아니라
-탐색할 수 있는 하나의 그림을 지향한다.
+      width: 2px;
+      height: 2px;
 
-사용자는 메뉴를 클릭하는 대신
-그림을 만지고, 머물고, 발견한다.
+      background: rgba(255, 255, 255, 0.7);
 
----
+      border-radius: 50%;
 
-## Experiments to Come
+      pointer-events: none;
+    }
 
-- Tea Menu
-- 문 열기
-- 연못
-- 비 오는 창문
-- 숨겨진 밤의 이야기
-- Secret Page
+    /* 사용자가 만드는 별 */
 
----
+    .star {
+      position: absolute;
 
-## Tech
+      width: 14px;
+      height: 14px;
 
-HTML
-CSS
-JavaScript
+      border: none;
+
+      border-radius: 50%;
+
+      background: white;
+
+      box-shadow:
+        0 0 5px white,
+        0 0 12px rgba(170, 210, 255, 0.9),
+        0 0 25px rgba(120, 175, 255, 0.7);
+
+      transform: translate(-50%, -50%);
+
+      z-index: 5;
+
+      cursor: pointer;
+
+      transition:
+        width 0.25s ease,
+        height 0.25s ease,
+        box-shadow 0.25s ease;
+    }
+
+    .star.big {
+      width: 25px;
+      height: 25px;
+
+      box-shadow:
+        0 0 10px white,
+        0 0 25px #8ecbff,
+        0 0 50px rgba(100, 170, 255, 0.9);
+    }
+
+    /* 별을 연결하는 SVG */
+
+    #lines {
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+
+      pointer-events: none;
+
+      z-index: 2;
+    }
+
+    line {
+      stroke: rgba(190, 215, 255, 0.45);
+
+      stroke-width: 1.5;
+    }
+
+    /* 제목 */
+
+    #guide {
+      position: absolute;
+
+      top: max(28px, env(safe-area-inset-top));
+      left: 0;
+
+      width: 100%;
+
+      text-align: center;
+
+      z-index: 20;
+
+      pointer-events: none;
+    }
+
+    #guide h1 {
+      font-size: 22px;
+
+      font-weight: 500;
+
+      letter-spacing: 0.08em;
+    }
+
+    #guide p {
+      margin-top: 8px;
+
+      font-size: 13px;
+
+      opacity: 0.6;
+    }
+
+    /* 별 개수 */
+
+    #counter {
+      position: absolute;
+
+      left: 20px;
+
+      bottom:
+        calc(24px + env(safe-area-inset-bottom));
+
+      padding: 10px 15px;
+
+      border-radius: 20px;
+
+      background: rgba(255,255,255,0.1);
+
+      backdrop-filter: blur(10px);
+
+      font-size: 13px;
+
+      z-index: 20;
+
+      pointer-events: none;
+    }
+
+    /* 삭제 버튼 */
+
+    #reset {
+      position: absolute;
+
+      right: 20px;
+
+      bottom:
+        calc(20px + env(safe-area-inset-bottom));
+
+      border: 1px solid rgba(255,255,255,0.25);
+
+      background: rgba(255,255,255,0.1);
+
+      color: white;
+
+      padding: 11px 18px;
+
+      border-radius: 22px;
+
+      font-size: 14px;
+
+      backdrop-filter: blur(10px);
+
+      z-index: 20;
+
+      cursor: pointer;
+    }
+
+    #reset:active {
+      transform: scale(0.95);
+    }
+
+    /* 등장 애니메이션 */
+
+    @keyframes appear {
+
+      0% {
+        transform:
+          translate(-50%, -50%)
+          scale(0);
+
+        opacity: 0;
+      }
+
+      70% {
+        transform:
+          translate(-50%, -50%)
+          scale(1.5);
+      }
+
+      100% {
+        transform:
+          translate(-50%, -50%)
+          scale(1);
+
+        opacity: 1;
+      }
+
+    }
+
+    .new-star {
+      animation:
+        appear 0.4s ease-out;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div id="sky">
+
+  <svg id="lines"></svg>
+
+  <div id="guide">
+    <h1>나의 별자리</h1>
+    <p>밤하늘을 터치해 별을 만들어보세요</p>
+  </div>
+
+  <div id="counter">
+    별 0개
+  </div>
+
+  <button id="reset">
+    처음으로
+  </button>
+
+</div>
+
+
+<script>
+
+  const sky =
+    document.getElementById("sky");
+
+  const svg =
+    document.getElementById("lines");
+
+  const counter =
+    document.getElementById("counter");
+
+  const resetButton =
+    document.getElementById("reset");
+
+
+  let stars = [];
+
+
+  /* --------------------
+     배경 별 만들기
+  -------------------- */
+
+  function makeBackgroundStars() {
+
+    const amount = 90;
+
+    for (
+      let i = 0;
+      i < amount;
+      i++
+    ) {
+
+      const star =
+        document.createElement("div");
+
+      star.className =
+        "background-star";
+
+      star.style.left =
+        Math.random() * 100 + "%";
+
+      star.style.top =
+        Math.random() * 100 + "%";
+
+      const size =
+        Math.random() * 2 + 1;
+
+      star.style.width =
+        size + "px";
+
+      star.style.height =
+        size + "px";
+
+      star.style.opacity =
+        Math.random() * 0.7 + 0.2;
+
+      sky.appendChild(star);
+
+    }
+
+  }
+
+
+  /* --------------------
+     별 생성
+  -------------------- */
+
+  function createStar(x, y) {
+
+    const star =
+      document.createElement("button");
+
+    star.className =
+      "star new-star";
+
+    star.style.left =
+      x + "px";
+
+    star.style.top =
+      y + "px";
+
+
+    /*
+      별 자체를 누르면
+      새 별이 생기지 않게 함
+    */
+
+    star.addEventListener(
+      "pointerdown",
+      function(event) {
+
+        event.stopPropagation();
+
+        star.classList.toggle("big");
+
+      }
+    );
+
+
+    sky.appendChild(star);
+
+
+    const newStar = {
+
+      element: star,
+
+      x: x,
+
+      y: y
+
+    };
+
+
+    /*
+      이전 별이 있으면
+      선으로 연결
+    */
+
+    if (stars.length > 0) {
+
+      const previous =
+        stars[stars.length - 1];
+
+      createLine(
+        previous.x,
+        previous.y,
+        x,
+        y
+      );
+
+    }
+
+
+    stars.push(newStar);
+
+    updateCounter();
+
+
+    /*
+      특정 개수마다
+      작은 이벤트
+    */
+
+    if (stars.length === 7) {
+
+      showMessage(
+        "작은 별자리가 만들어졌어요 ✨"
+      );
+
+    }
+
+    if (stars.length === 12) {
+
+      showMessage(
+        "밤하늘이 당신의 별들로 채워지고 있어요"
+      );
+
+    }
+
+  }
+
+
+  /* --------------------
+     별 연결선
+  -------------------- */
+
+  function createLine(
+    x1,
+    y1,
+    x2,
+    y2
+  ) {
+
+    const line =
+      document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line"
+      );
+
+    line.setAttribute(
+      "x1",
+      x1
+    );
+
+    line.setAttribute(
+      "y1",
+      y1
+    );
+
+    line.setAttribute(
+      "x2",
+      x2
+    );
+
+    line.setAttribute(
+      "y2",
+      y2
+    );
+
+    svg.appendChild(line);
+
+  }
+
+
+  /* --------------------
+     화면 터치
+  -------------------- */
+
+  sky.addEventListener(
+    "pointerdown",
+    function(event) {
+
+      /*
+        리셋 버튼을 누른 경우 제외
+      */
+
+      if (
+        event.target === resetButton
+      ) {
+
+        return;
+
+      }
+
+
+      const rect =
+        sky.getBoundingClientRect();
+
+
+      const x =
+        event.clientX -
+        rect.left;
+
+      const y =
+        event.clientY -
+        rect.top;
+
+
+      /*
+        위쪽 안내문 근처에서는
+        별을 만들지 않음
+      */
+
+      if (y < 110) {
+
+        return;
+
+      }
+
+
+      createStar(x, y);
+
+    }
+  );
+
+
+  /* --------------------
+     별 개수 표시
+  -------------------- */
+
+  function updateCounter() {
+
+    counter.textContent =
+      "별 " +
+      stars.length +
+      "개";
+
+  }
+
+
+  /* --------------------
+     메시지
+  -------------------- */
+
+  function showMessage(text) {
+
+    const message =
+      document.createElement("div");
+
+    message.textContent =
+      text;
+
+    message.style.position =
+      "absolute";
+
+    message.style.left =
+      "50%";
+
+    message.style.top =
+      "50%";
+
+    message.style.transform =
+      "translate(-50%, -50%)";
+
+    message.style.padding =
+      "14px 20px";
+
+    message.style.borderRadius =
+      "30px";
+
+    message.style.background =
+      "rgba(255,255,255,0.15)";
+
+    message.style.backdropFilter =
+      "blur(15px)";
+
+    message.style.fontSize =
+      "14px";
+
+    message.style.zIndex =
+      "30";
+
+    message.style.pointerEvents =
+      "none";
+
+    message.style.transition =
+      "opacity 1s";
+
+
+    sky.appendChild(message);
+
+
+    setTimeout(
+      function() {
+
+        message.style.opacity =
+          "0";
+
+      },
+      1500
+    );
+
+
+    setTimeout(
+      function() {
+
+        message.remove();
+
+      },
+      2500
+    );
+
+  }
+
+
+  /* --------------------
+     처음으로
+  -------------------- */
+
+  resetButton.addEventListener(
+    "pointerdown",
+    function(event) {
+
+      event.stopPropagation();
+
+      stars.forEach(
+        function(star) {
+
+          star.element.remove();
+
+        }
+      );
+
+      stars = [];
+
+      svg.innerHTML = "";
+
+      updateCounter();
+
+    }
+  );
+
+
+  makeBackgroundStars();
+
+</script>
+
+</body>
+</html>
